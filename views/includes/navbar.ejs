@@ -1,0 +1,32 @@
+<header class="app-header">
+  <div class="landing-nav">
+    <a href="<%= typeof slug !== 'undefined' && slug ? `/Mensa.app/canteen/${slug}/dashboard/user` : '/Mensa.app' %>" class="nav-brand">
+      <span class="nav-brand-icon"><i class="fa-solid fa-burger"></i></span>
+      <span class="nav-title"><%= typeof clgName !== 'undefined' && clgName ? clgName : 'Mensa' %><span class="brand-dot"></span></span>
+    </a>
+    <div class="nav-actions">
+      <span class="live-chip"><span class="live-dot"></span>Live</span>
+
+      <%# Cart icon shows ONLY to logged in students / users %>
+      <% if (typeof currUser !== 'undefined' && currUser && currUser.role && currUser.role.includes("user") && typeof slug !== 'undefined' && slug) { %>
+        <a href="/Mensa.app/canteen/<%= slug %>/cart" class="cart-icon-btn" id="cartIcon" aria-label="View cart" title="View cart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge" id="cartBadge"><%= typeof cartCount !== 'undefined' ? cartCount : 0 %></span>
+        </a>
+      <% } %>
+
+      <%# Logout button when logged in, Login button when not logged in %>
+      <% if (typeof currUser !== 'undefined' && currUser) { %>
+        <a href="<%= typeof slug !== 'undefined' && slug ? `/Mensa.app/canteen/${slug}/users/logout` : '/Mensa.app/logout' %>" class="btn-secondary btn-sm nav-auth-btn" title="Sign out of account">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Log out</span>
+        </a>
+      <% } else if (typeof slug !== 'undefined' && slug) { %>
+        <a href="/Mensa.app/canteen/<%= slug %>#login" class="btn-secondary btn-sm nav-auth-btn" title="Sign in to campus counter">
+          <i class="fa-solid fa-user"></i>
+          <span>Log in</span>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</header>

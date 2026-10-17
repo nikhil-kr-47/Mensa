@@ -1,0 +1,49 @@
+<%layout("./layouts/bp.ejs")%>
+<body>
+    <div class="dash-wrap">
+        <a href="/Mensa.app/canteen/<%= slug %>/dashboard/admin" class="back-link-plain"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>
+
+        <div class="menu-manage-head">
+            <h1 class="page-headline">Menu items</h1>
+            <a href="/Mensa.app/canteen/<%= slug %>/menu/admin/new" class="btn-primary">Add item</a>
+        </div>
+
+        <div class="menu-manage-container">
+            <% menuItems.forEach(item => { %>
+                <div class="menu-row <%= !item.isAvailable ? 'out-of-stock' : '' %>">
+                    <span class="veg-dot <%= !item.isVeg ? 'nonveg' : '' %>" title="<%= item.isVeg ? 'Vegetarian' : 'Non-vegetarian' %>"></span>
+                    <div class="menu-info">
+                        <div class="menu-name"><%= item.name %></div>
+                        <div class="menu-cat-sub">
+                            <span><%= item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase() %></span>
+                            <% if(!item.isAvailable){ %><span class="out-chip">Sold out</span><% } %>
+                        </div>
+                    </div>
+                    <span class="menu-price">&#8377;<%= item.price %></span>
+                    <button type="button" class="avail-toggle <%= !item.isAvailable ? 'off' : '' %>" data-item-id="<%= item._id %>" aria-label="Toggle availability">
+                        <span class="avail-knob"></span>
+                    </button>
+                    
+                    <div class="kebab-wrap">
+                        <button type="button" class="kebab-btn" aria-label="Item options">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="kebab-menu">
+                            <a href="/Mensa.app/canteen/<%= slug %>/menu/admin/<%= item._id %>/edit" class="kebab-item">Edit item</a>
+                            <button type="button" class="kebab-item deleteBtn danger" data-item-id="<%= item._id %>">Delete item</button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+
+            <% if(menuItems.length === 0){ %>
+                <div class="empty-state-box">
+                    <p class="empty-state-desc">No items yet. Add your first item to build your canteen menu.</p>
+                    <a href="/Mensa.app/canteen/<%= slug %>/menu/admin/new" class="btn-primary">Add item</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <script>const slug="<%= slug %>";</script>
+    <script src="/menu.js"></script>
+</body>

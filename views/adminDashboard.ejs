@@ -1,0 +1,191 @@
+<%layout("./layouts/bp.ejs")%>
+<body>
+    <div class="dash-wrap">
+        <section class="admin-overview-section">
+            <div class="dash-header-row">
+                <div>
+                    <h1 class="page-headline">Today's overview</h1>
+                    <p class="dash-subhead">Live queue and counter status.</p>
+                </div>
+            </div>
+            <div class="stat-tiles-grid">
+                <div class="stat-tile">
+                    <span class="stat-num" id="hostelCountNum"><%= hostelCount %></span>
+                    <span class="stat-label">Hostel delivery</span>
+                </div>
+                <div class="stat-tile">
+                    <span class="stat-num" id="queueCountNum"><%= queueCount %></span>
+                    <span class="stat-label">In queue</span>
+                </div>
+                <div class="stat-tile">
+                    <span class="stat-num" id="slotCountNum"><%= slotCount %></span>
+                    <span class="stat-label">Slot bookings</span>
+                </div>
+                <div class="stat-tile">
+                    <span class="stat-num" id="revenueNum">&#8377;<%= typeof revenue === 'number' ? revenue : (Array.isArray(revenue) && revenue.length > 0 ? (revenue[0].total || revenue[0].revenue || 0) : 0) %></span>
+                    <span class="stat-label">Revenue today</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="orders-section">
+            <div class="orders-section-head">
+                <h3 class="section-heading">Orders</h3>
+                <div class="order-type-btns segmented-control">
+                    <button type="button" id="hostelOrderBtn" class="btnActive">Hostel delivery</button>
+                    <button type="button" id="queueOrderBtn">Live queue</button>
+                    <button type="button" id="slotOrderBtn">Slot bookings</button>
+                </div>
+            </div>
+
+            <div class="ordersTable">
+                <div id="hostelTable" class="hostelOrderBtn orders-table-panel">
+                    <% if (hostelOrders.length === 0) { %>
+                        <div class="empty-orders-note">No active hostel delivery orders.</div>
+                    <% } %>
+                    <% hostelOrders.forEach(order => { %>
+                        <div class="orders-card" data-orderid="<%= order._id %>" data-ordertype="hostel">
+                            <div class="order-summary-row">
+                                <i class="fa-solid fa-caret-right caret-icon"></i>
+                                <span class="order-token">#<%= order.tokenNo || order.roomNo %></span>
+                                <span class="order-price">&#8377;<%= order.total %></span>
+                                <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
+                            </div>
+                            <div class="orderDetailDiv">
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Itemized</span>
+                                    <div class="detail-items-list">
+                                        <% order.items.forEach(item => { %>
+                                            <div class="item-line">
+                                                <span><%= item.quantity %> &times; <%= item.name %></span>
+                                                <span class="item-line-price">&#8377;<%= item.price * item.quantity %></span>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Order info</span>
+                                    <div class="meta-line"><span class="meta-label">Placed</span> <span class="meta-value"><%= order.createdAt ? order.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Student</span> <span class="meta-value"><%= order.user ? order.user.username : 'Student' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Contact</span> <span class="meta-value"><%= order.user ? order.user.phoneNo : '-' %></span></div>
+                                    <% if(order.orderType==="hostel"){ %>
+                                        <div class="meta-line"><span class="meta-label">Room</span> <span class="meta-value"><%= order.roomNo || '-' %></span></div>
+                                    <% } else if(order.orderType==="slot"){ %>
+                                        <div class="meta-line"><span class="meta-label">Slot</span> <span class="meta-value"><%= order.slotTime || '-' %></span></div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+
+                <div id="queueTable" class="queueOrderBtn orders-table-panel" style="display:none;">
+                    <% if (queueOrders.length === 0) { %>
+                        <div class="empty-orders-note">No active queue orders.</div>
+                    <% } %>
+                    <% queueOrders.forEach(order => { %>
+                        <div class="orders-card" data-orderid="<%= order._id %>" data-ordertype="queue">
+                            <div class="order-summary-row">
+                                <i class="fa-solid fa-caret-right caret-icon"></i>
+                                <span class="order-token">#<%= order.tokenNo %></span>
+                                <span class="order-price">&#8377;<%= order.total %></span>
+                                <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
+                            </div>
+                            <div class="orderDetailDiv">
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Itemized</span>
+                                    <div class="detail-items-list">
+                                        <% order.items.forEach(item => { %>
+                                            <div class="item-line">
+                                                <span><%= item.quantity %> &times; <%= item.name %></span>
+                                                <span class="item-line-price">&#8377;<%= item.price * item.quantity %></span>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Order info</span>
+                                    <div class="meta-line"><span class="meta-label">Placed</span> <span class="meta-value"><%= order.createdAt ? order.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Student</span> <span class="meta-value"><%= order.user ? order.user.username : 'Student' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Contact</span> <span class="meta-value"><%= order.user ? order.user.phoneNo : '-' %></span></div>
+                                    <% if(order.orderType==="hostel"){ %>
+                                        <div class="meta-line"><span class="meta-label">Room</span> <span class="meta-value"><%= order.roomNo || '-' %></span></div>
+                                    <% } else if(order.orderType==="slot"){ %>
+                                        <div class="meta-line"><span class="meta-label">Slot</span> <span class="meta-value"><%= order.slotTime || '-' %></span></div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+
+                <div id="slotTable" class="slotOrderBtn orders-table-panel" style="display:none;">
+                    <% if (slotOrders.length === 0) { %>
+                        <div class="empty-orders-note">No active slot bookings.</div>
+                    <% } %>
+                    <% slotOrders.forEach(order => { %>
+                        <div class="orders-card" data-orderid="<%= order._id %>" data-ordertype="slot">
+                            <div class="order-summary-row">
+                                <i class="fa-solid fa-caret-right caret-icon"></i>
+                                <span class="order-token">#<%= order.tokenNo || order.slotTime %></span>
+                                <span class="order-price">&#8377;<%= order.total %></span>
+                                <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
+                            </div>
+                            <div class="orderDetailDiv">
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Itemized</span>
+                                    <div class="detail-items-list">
+                                        <% order.items.forEach(item => { %>
+                                            <div class="item-line">
+                                                <span><%= item.quantity %> &times; <%= item.name %></span>
+                                                <span class="item-line-price">&#8377;<%= item.price * item.quantity %></span>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Order info</span>
+                                    <div class="meta-line"><span class="meta-label">Placed</span> <span class="meta-value"><%= order.createdAt ? order.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Student</span> <span class="meta-value"><%= order.user ? order.user.username : 'Student' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Contact</span> <span class="meta-value"><%= order.user ? order.user.phoneNo : '-' %></span></div>
+                                    <% if(order.orderType==="hostel"){ %>
+                                        <div class="meta-line"><span class="meta-label">Room</span> <span class="meta-value"><%= order.roomNo || '-' %></span></div>
+                                    <% } else if(order.orderType==="slot"){ %>
+                                        <div class="meta-line"><span class="meta-label">Slot</span> <span class="meta-value"><%= order.slotTime || '-' %></span></div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-summary-section">
+            <div class="menu-section-head">
+                <h3 class="section-heading">Menu summary</h3>
+                <a href="/Mensa.app/canteen/<%= slug %>/menu/admin" class="btn-secondary">Manage menu</a>
+            </div>
+
+            <div class="menu-summary-list">
+                <% menuItems.forEach(item => { %>
+                    <div class="menu-row <%= !item.isAvailable ? 'out-of-stock' : '' %>">
+                        <span class="veg-dot <%= !item.isVeg ? 'nonveg' : '' %>" title="<%= item.isVeg ? 'Vegetarian' : 'Non-vegetarian' %>"></span>
+                        <div class="menu-info">
+                            <span class="menu-name"><%= item.name %></span>
+                            <div class="menu-cat-sub">
+                                <span><%= item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase() %></span>
+                                <% if(!item.isAvailable){ %><span class="out-chip">Sold out</span><% } %>
+                            </div>
+                        </div>
+                        <span class="menu-price">&#8377;<%= item.price %></span>
+                    </div>
+                <% }) %>
+            </div>
+        </section>
+    </div>
+    <script>const slug="<%= slug %>"</script>
+</body>

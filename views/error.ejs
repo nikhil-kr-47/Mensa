@@ -1,0 +1,25 @@
+<%layout("./layouts/bp.ejs")%>
+<body>
+<div class="error-page-container">
+    <div class="error-message-card">
+        <div class="error-card-top">
+            <div class="error-card-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="error-card-text">
+                <h2 class="error-card-title"><%= typeof statusCode !== 'undefined' && statusCode ? `${statusCode} Notice` : "Notice" %></h2>
+                <p class="error-card-desc"><%= message || "Something went wrong. Please try again." %></p>
+            </div>
+        </div>
+        <div class="error-card-actions">
+            <a href="javascript:history.back()" class="btn-secondary btn-sm">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Go back</span>
+            </a>
+            <a href="/Mensa.app" class="btn-primary btn-sm">
+                <span>Return to home</span>
+            </a>
+        </div>
+    </div>
+</div>
+</body>

@@ -1,0 +1,23 @@
+<% if (success && success.length) { %>
+  <div class="alert-container">
+    <div class="alert alert-success" role="alert">
+      <div class="alert-left">
+        <i class="fa-solid fa-circle-check alert-icon"></i>
+        <span class="alert-text"><%= success %></span>
+      </div>
+      <button type="button" class="btn-close" onclick="let a=this.closest('.alert-container')||this.closest('.alert');if(a){a.style.transition='opacity 0.2s, transform 0.2s';a.style.opacity='0';a.style.transform='translateY(-6px)';setTimeout(()=>a.remove(),200);}" aria-label="Dismiss notification"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+<% } %>
+
+<% if (error && error.length) { %>
+  <div class="alert-container">
+    <div class="alert alert-danger" role="alert">
+      <div class="alert-left">
+        <i class="fa-solid fa-triangle-exclamation alert-icon"></i>
+        <span class="alert-text"><%= error %></span>
+      </div>
+      <button type="button" class="btn-close" onclick="let a=this.closest('.alert-container')||this.closest('.alert');if(a){a.style.transition='opacity 0.2s, transform 0.2s';a.style.opacity='0';a.style.transform='translateY(-6px)';setTimeout(()=>a.remove(),200);}" aria-label="Dismiss notification"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+<% } %>

@@ -1,0 +1,70 @@
+<%layout("./layouts/bp.ejs")%>
+<body>
+<div class="auth-page-container">
+    <div class="auth-header">
+        <h1 class="page-headline"><%= clgName %></h1>
+        <p class="auth-subhead">Only college email addresses can register for campus counter access.</p>
+    </div>
+
+    <div class="auth-card">
+        <div class="sign-log-btn-div auth-underline-tabs">
+            <button type="button" id="signUpChoiceBtn" class="tab-btn active">Sign up</button>
+            <button type="button" id="logInChoiceBtn" class="tab-btn">Log in</button>
+        </div>
+
+        <form method="POST" action="/Mensa.app/canteen/<%= slug %>/users/signup/user" class="signup-form auth-form">
+            <div class="form-group">
+                <label for="username" class="form-label">Full name</label>
+                <input type="text" name="username" id="username" placeholder="Alex Morgan" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">College email</label>
+                <input type="email" name="email" id="email" placeholder="student@college.edu" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNo" class="form-label">Phone number</label>
+                <input type="text" name="phoneNo" id="phoneNo" placeholder="10-digit mobile number" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="new-pass" class="form-label">Password</label>
+                <input type="password" id="new-pass" name="password" placeholder="At least 6 characters" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-new-pass" class="form-label">Confirm password</label>
+                <input type="password" id="confirm-new-pass" name="confirmPassword" placeholder="Repeat your password" class="form-input" required>
+                <span class="msgField form-error-msg"></span>
+            </div>
+
+            <button type="submit" class="btn-primary auth-submit-btn">
+                Create account
+            </button>
+        </form>
+
+        <form method="POST" id="login" action="/Mensa.app/canteen/<%= slug %>/users/login/user" style="display: none;" class="login-form auth-form">
+            <div class="login-role-switcher">
+                <button type="button" id="userLoginChoiceBtn" class="role-btn active">Student login</button>
+                <button type="button" id="adminLoginChoiceBtn" class="role-btn">Staff login</button>
+            </div>
+
+            <div class="form-group">
+                <label for="login-email" class="form-label">College email</label>
+                <input type="email" name="email" id="login-email" placeholder="name@college.edu" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="login-password" class="form-label">Password</label>
+                <input type="password" name="password" id="login-password" placeholder="Your password" class="form-input" required>
+            </div>
+
+            <button type="submit" class="btn-primary auth-submit-btn">
+                Log in
+            </button>
+        </form>
+    </div>
+</div>
+<script>const slug="<%= slug %>"</script>
+</body>
