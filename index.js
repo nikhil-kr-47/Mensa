@@ -66,30 +66,42 @@ app.set("views",path.join(__dirname,"views"));
 app.engine("ejs",engine);
 
 
+const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/CampusBites";
+
+if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+}
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SESION_SECRET || 'vhvgfdfghh'
+    },
+    touchAfter: 24 * 3600
+});
+
+store.on("error", (err) => {
+    console.log("Mongo session store error", err);
+});
+
 //Sessions
 app.use(session({
-    secret: 'vhvgfdfghh',
+    store,
+    secret: process.env.SESION_SECRET || 'vhvgfdfghh',
     resave: false,
     saveUninitialized: false,
-    // store: MongoStore.create({
-    //     mongoUrl:process.env.DB_URL,
-    //     ttl: 24 * 60 * 60 //time-to-live
-    //   }),
     cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV==="production",
-        maxAge: 24*60*60*1000
-      },
-     }
-  ));
-  
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
 
 app.use(passport.initialize());
 passport.use("local",new localStrategy({usernameField:"email"},User.authenticate()));
 app.use(passport.session());  
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
 
 app.use(flash());
 app.use((req,res,next)=>{
@@ -98,22 +110,24 @@ app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   next();
 });
-  
 
 app.use(methOverride("_method"));
 // app.use(cookieParser("jbhjjhdscjhvvs"));
 
 async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/CampusBites");
+    await mongoose.connect(dbUrl);
 }
 
 main().then(()=>{console.log("Connected to DB")}).catch(err=>console.log(err));
 
-
-const port=8080;
+const port = process.env.PORT || 8080;
 
 app.listen(port,()=>{
     console.log(`App is listening on ${port} `);
+});
+
+app.get("/", (req, res) => {
+    res.redirect("/Mensa.app");
 });
 
 app.get("/Mensa.app",(req,res)=>{
