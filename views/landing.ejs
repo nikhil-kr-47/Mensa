@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensa — Campus Canteens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="landing-body">
+    <header class="app-header">
+        <div class="landing-nav">
+            <a href="/Mensa.app" class="nav-brand">
+                <span class="nav-brand-icon"><i class="fa-solid fa-burger"></i></span>
+                <span class="nav-title">Mensa<span class="brand-dot"></span></span>
+            </a>
+            <div class="nav-actions">
+                <% if (typeof currUser !== 'undefined' && currUser) { %>
+                    <a href="/Mensa.app/logout" class="btn-secondary btn-sm nav-auth-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Log out</span>
+                    </a>
+                <% } else { %>
+                    <a href="/Mensa.app/adminRegister" class="btn-primary header-cta" id="reg-canteen-btn">
+                        Register your canteen
+                    </a>
+                <% } %>
+                <button type="button" class="ham-icon" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="reg-btn-div" style="display: none;">
+        <% if (typeof currUser !== 'undefined' && currUser) { %>
+            <a href="/Mensa.app/logout" class="btn-secondary" style="width: 100%;">Log out</a>
+        <% } else { %>
+            <a href="/Mensa.app/adminRegister" class="btn-primary" style="width: 100%;">Register your canteen</a>
+        <% } %>
+    </div>
+
+    <%-include("./includes/flash.ejs")%>
+
+    <main class="landing-main">
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-visual">
+                    <div class="ticket-card">
+                        <div class="ticket-upper">
+                            <div class="ticket-header-row">
+                                <span class="ticket-canteen-name">Central campus canteen</span>
+                                <span class="live-chip"><span class="live-dot"></span>Live</span>
+                            </div>
+                            <div class="ticket-token-wrap">
+                                <span class="ticket-token-num">#001</span>
+                            </div>
+                        </div>
+                        <div class="ticket-divider"></div>
+                        <div class="ticket-lower">
+                            <span class="ticket-meta-label">Current token in preparation</span>
+                            <span class="ticket-meta-sub">Pick up at counter when called</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-content">
+                    <span class="eyebrow-text">For campus canteen owners</span>
+                    <h1 class="hero-heading">
+                        Every canteen. Its own counter.
+                    </h1>
+                    <p class="hero-paragraph">
+                        Give your college canteen a real-time menu, an instant live queue, and a dedicated link only your students can access. Zero app downloads, zero chaos at the counter.
+                    </p>
+                    <div class="hero-cta-group">
+                        <a href="/Mensa.app/adminRegister" class="btn-primary hero-btn">
+                            Register your canteen
+                        </a>
+                        <a href="#howItWorks" class="btn-secondary hero-btn-outline">
+                            How it works
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="steps-section" id="howItWorks">
+            <div class="content-width">
+                <span class="eyebrow-text">How it works</span>
+                <h2 class="section-title">From sign-up to your first order</h2>
+                <div class="golive-steps">
+                    <div class="step-card">
+                        <div class="step-badge">1</div>
+                        <h3 class="step-name">Register canteen</h3>
+                        <p class="step-desc">Enter your college details, canteen location, and owner verification.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-badge">2</div>
+                        <h3 class="step-name">Verify campus</h3>
+                        <p class="step-desc">We verify your institution domain so only your students can place orders.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-badge">3</div>
+                        <h3 class="step-name">Start serving</h3>
+                        <p class="step-desc">Share your private link or counter QR code and serve meals seamlessly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="content-width">
+                <span class="eyebrow-text">Built for speed</span>
+                <h2 class="section-title">Everything a modern counter needs</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-link"></i></div>
+                        <h3 class="feature-title">Your private link</h3>
+                        <p class="feature-desc">Every canteen counter receives a personalized URL. No mixing orders across vendors.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                        <h3 class="feature-title">Live queue and slots</h3>
+                        <p class="feature-desc">Slot-based and token queue ordering keeps counter traffic smooth without crowd surges.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-user-graduate"></i></div>
+                        <h3 class="feature-title">Students and staff only</h3>
+                        <p class="feature-desc">College domain authentication ensures orders are placed exclusively by authorized campus members.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                        <h3 class="feature-title">Live admin terminal</h3>
+                        <p class="feature-desc">Manage menu availability, toggle out-of-stock items in real time, and view daily queue stats.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%-include("./includes/footer.ejs")%>
+    <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<select class="order-status" name="status">
+    <option value="pending" <% if(order.status==="pending"){ %>selected<%}%>>Pending</option>
+    <option value="preparing" <% if(order.status==="preparing"){ %>selected<%}%> >Preparing</option>
+    <option value="ready" <% if(order.status==="ready"){ %>selected<%}%> >Ready</option>
+    <option value="delivered" <% if(order.status==="delivered"){ %>selected<%}%> >delivered</option>
+</select>
+<button>Update</button>

@@ -1,0 +1,33 @@
+<div class="auth-page-container">
+    <div class="auth-header">
+        <h1 class="page-headline">Enter verification code</h1>
+        <p class="auth-subhead">We sent a 6-digit code to <strong class="highlight-ink"><%= email %></strong></p>
+    </div>
+
+    <div class="auth-card otp-card">
+        <form method="POST" action="/Mensa.app/otpVerify/<%= type %>" class="otp-form auth-form">
+            <input type="hidden" name="email" value="<%= email %>">
+            <input type="hidden" id="otpLastUpdatedAt" value="<%= otpLastUpdatedAt %>">
+            
+            <div class="form-group text-center">
+                <label class="form-label" for="otpInput">6-digit confirmation code</label>
+                <div class="otp-input-wrap">
+                    <input type="text" maxlength="6" id="otpInput" name="otpValue" required inputmode="numeric" pattern="[0-9]*" class="form-input otp-input" placeholder="······" autofocus>
+                </div>
+                <span class="field-hint">Code expires in 5 minutes</span>
+            </div>
+
+            <button type="submit" class="btn-primary auth-submit-btn">
+                Verify and continue
+            </button>
+        </form>
+
+        <form method="POST" action="/Mensa.app/resendOtp/<%= type %>" class="resend-form text-center">
+            <input type="hidden" name="email" value="<%= email %>">
+            <p class="resend-text">
+                Didn't receive the email? 
+                <button type="submit" class="otp-resend-btn">Resend code</button>
+            </p>
+        </form>
+    </div>
+</div>

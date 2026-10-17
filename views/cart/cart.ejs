@@ -1,0 +1,106 @@
+<% layout("./layouts/bp.ejs") %>
+<body>
+<div class="cart-page-wrap">
+    <div class="cart-nav-bar">
+        <a href="/Mensa.app/canteen/<%= slug %>/dashboard/user" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to menu</span>
+        </a>
+    </div>
+
+    <div class="cart-header">
+        <h1 class="page-headline">Your cart</h1>
+        <p class="cart-subhead">Review items and choose delivery or counter pickup.</p>
+    </div>
+
+    <% if (cart.length === 0) { %>
+        <div class="empty-state-box">
+            <h2 class="empty-state-title">Your cart is empty</h2>
+            <p class="empty-state-desc">You have not added any items to your order tray yet.</p>
+            <a href="/Mensa.app/canteen/<%= slug %>/dashboard/user" class="btn-primary">
+                Browse menu
+            </a>
+        </div>
+    <% } else { %>
+        <div class="cart-container">
+            <div class="cart-items-card">
+                <div class="cart-items-list">
+                    <% cart.forEach(item => { %>
+                        <div class="cart-row" data-itemid="<%= item.menuItemId %>">
+                            <div class="cart-info">
+                                <span class="cart-name"><%= item.name %></span>
+                                <span class="cart-price">&#8377;<%= item.price %></span>
+                            </div>
+                            <div class="qty-stepper">
+                                <button type="button" class="qty-btn" data-action="decrease" aria-label="Decrease quantity">−</button>
+                                <span class="qty-val"><%= item.quantity %></span>
+                                <button type="button" class="qty-btn" data-action="increase" aria-label="Increase quantity">+</button>
+                            </div>
+                            <div class="cart-actions-end">
+                                <span class="cart-subtotal">&#8377;<%= item.price * item.quantity %></span>
+                                <button type="button" class="remove-btn" data-item-id="<%= item.menuItemId %>" aria-label="Remove item" title="Remove item">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <form method="POST" action="/Mensa.app/canteen/<%= slug %>/orders" id="placeOrderForm" class="checkout-card">
+                <div class="preference-row">
+                    <div class="form-group preference-field">
+                        <label class="form-label" for="deliveryMode">Delivery mode</label>
+                        <select name="deliveryMode" id="deliveryMode" class="form-select">
+                            <option value="hostel">Hostel delivery</option>
+                            <option value="counter">Counter pickup</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group preference-field room-no-group" id="roomNoGroup">
+                        <label class="form-label" for="roomNo">Room number</label>
+                        <input type="text" name="roomNo" id="roomNo" placeholder="Room 101" class="form-input">
+                    </div>
+
+                    <div class="form-group preference-field order-type-div" style="display:none;">
+                        <label class="form-label" for="orderType">Order type</label>
+                        <select name="orderType" id="orderType" class="form-select">
+                            <option value="queue">Live queue</option>
+                            <option value="slot">Time slot</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group preference-field slot-select-div" style="display:none;">
+                        <label class="form-label" for="slot">Pickup slot</label>
+                        <select name="slot" id="slot" disabled class="form-select">
+                            <option value="12:30 PM">12:30 PM</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="1:30 PM">1:30 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="cart-total-section">
+                    <div class="summary-line">
+                        <span class="summary-label">Subtotal</span>
+                        <span class="summary-val" id="cartTotalSummary">&#8377;<%= total %></span>
+                    </div>
+                    <div class="summary-line total-line">
+                        <span class="total-label">Total</span>
+                        <span class="total-amount" id="cartTotal">&#8377;<%= total %></span>
+                    </div>
+                </div>
+
+                <div class="checkout-btn-wrap">
+                    <button type="submit" class="btn-primary place-order-btn">
+                        Place order
+                    </button>
+                </div>
+            </form>
+        </div>
+    <% } %>
+</div>
+<script>const slug="<%= slug %>";</script>
+<script src="/cart.js"></script>
+</body>

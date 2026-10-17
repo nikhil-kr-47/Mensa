@@ -1,0 +1,60 @@
+<%layout("./layouts/bp.ejs")%>
+<body>
+<div class="dash-wrap">
+    <a href="/Mensa.app/canteen/<%= slug %>/menu/admin" class="back-link-plain"><i class="fa-solid fa-arrow-left"></i> Back to menu</a>
+
+    <div class="menu-manage-head">
+        <h1 class="page-headline"><%= item ? "Edit item" : "Add item" %></h1>
+    </div>
+
+    <div class="item-form-card">
+        <form method="POST" action="<%= item ? `/Mensa.app/canteen/${slug}/menu/admin/${item._id}/edit?_method=PUT` : `/Mensa.app/canteen/${slug}/menu/admin/new` %>" class="auth-form">
+            <div class="form-group">
+                <label class="form-label" for="itemName">Item name</label>
+                <input type="text" id="itemName" name="name" class="form-input" placeholder="Masala dosa" value="<%= item ? item.name : '' %>" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="itemDesc">Description</label>
+                <textarea id="itemDesc" name="description" rows="3" class="form-input form-textarea" placeholder="Crispy golden crepe served with sambar and fresh coconut chutney"><%= item ? item.description : '' %></textarea>
+            </div>
+
+            <div class="field-row-split">
+                <div class="form-group">
+                    <label class="form-label" for="itemPrice">Price (&#8377;)</label>
+                    <input type="number" id="itemPrice" name="price" min="1" class="form-input" placeholder="60" value="<%= item ? item.price : '' %>" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="itemCat">Category</label>
+                    <select id="itemCat" name="category" class="form-select" required>
+                        <option value="">Select category</option>
+                        <% ["snacks","meals","beverages","south indian","desserts","others"].forEach(cat => { %>
+                            <option value="<%= cat %>" <%= item && item.category === cat ? "selected" : "" %>><%= cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase() %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Classification</label>
+                <div class="segmented-control classification-segmented">
+                    <label class="segmented-option">
+                        <input type="radio" name="isVeg" value="true" <%= !item || item.isVeg ? "checked" : "" %> class="sr-only-radio">
+                        <span class="segmented-label"><span class="veg-dot veg"></span> Vegetarian</span>
+                    </label>
+                    <label class="segmented-option">
+                        <input type="radio" name="isVeg" value="false" <%= item && !item.isVeg ? "checked" : "" %> class="sr-only-radio">
+                        <span class="segmented-label"><span class="veg-dot nonveg"></span> Non-vegetarian</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions-end">
+                <button type="submit" class="btn-primary">
+                    <%= item ? "Save changes" : "Add item" %>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>

@@ -1,0 +1,80 @@
+<%layout("./layouts/bp.ejs")%>
+<body>
+<div class="menu-page">
+    <div class="menu-header-bar">
+        <div>
+            <h1 class="page-headline">Menu</h1>
+            <p class="menu-subhead">Order food for pickup or hostel delivery.</p>
+        </div>
+        <div class="header-cart-wrap">
+            <% if (typeof currUser !== 'undefined' && currUser && currUser.role && currUser.role.includes("user")) { %>
+            <a href="/Mensa.app/canteen/<%= slug %>/cart" class="btn-cart-pill" aria-label="View cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Cart</span>
+                <span class="cart-pill-count" id="cartBadge"><%= cartCount %></span>
+            </a>
+            <% } else if (typeof currUser === 'undefined' || !currUser) { %>
+            <a href="/Mensa.app/canteen/<%= slug %>#login" class="btn-primary btn-sm">
+                Log in to order
+            </a>
+            <% } %>
+        </div>
+    </div>
+
+    <% if (typeof activeOrder !== 'undefined' && activeOrder) { %>
+    <div class="order-banner-ticket" id="orderBanner">
+        <div class="order-ticket-left">
+            <span class="ticket-prefix">Token</span>
+            <div class="ticket-num" id="bannerToken">#<%= activeOrder.tokenNo %></div>
+        </div>
+        <div class="ticket-divider-v"></div>
+        <div class="ticket-right">
+            <div class="ticket-status-row">
+                <span class="order-status-badge" data-order-status="<%= (activeOrder.status || 'preparing').toLowerCase() %>" id="bannerStatus">
+                    <%= activeOrder.status ? activeOrder.status.charAt(0).toUpperCase() + activeOrder.status.slice(1).toLowerCase() : "Preparing" %>
+                </span>
+                <% if (activeOrder.orderType) { %>
+                    <span class="ticket-type-label"><%= activeOrder.orderType === 'hostel' ? 'Hostel delivery' : (activeOrder.orderType === 'slot' ? 'Slot pickup' : 'Live queue') %></span>
+                <% } %>
+            </div>
+            <div class="ticket-items-detail" id="bannerDetail"><%= activeOrder.items ? activeOrder.items.map(i => i.name).join(", ") : "" %></div>
+        </div>
+    </div>
+    <% } %>
+
+    <div class="cat-tabs-container">
+        <div class="cat-tabs">
+            <button type="button" class="cat-tab active" data-category="all">All items</button>
+            <% [...new Set(menuItems.map(i => i.category))].forEach(cat => { %>
+                <button type="button" class="cat-tab" data-category="<%= cat %>"><%= cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase() %></button>
+            <% }) %>
+        </div>
+    </div>
+
+    <div class="menu-grid">
+        <% menuItems.forEach(item => { %>
+            <div class="item-card <%= !item.isAvailable ? 'sold-out' : '' %>" data-category="<%= item.category %>">
+                <div class="item-card-top">
+                    <span class="veg-dot <%= !item.isVeg ? 'nonveg' : '' %>" title="<%= item.isVeg ? 'Vegetarian' : 'Non-vegetarian' %>"></span>
+                    <div class="item-header-info">
+                        <h2 class="item-name"><%= item.name %></h2>
+                        <% if (!item.isAvailable) { %>
+                            <span class="sold-out-chip">Sold out</span>
+                        <% } %>
+                    </div>
+                </div>
+                <p class="item-desc"><%= item.description || 'Freshly prepared at the canteen counter.' %></p>
+                <div class="item-bottom">
+                    <div class="item-price">&#8377;<%= item.price %></div>
+                    <button class="add-btn" data-action="increase" data-item-id="<%= item._id %>" <%= !item.isAvailable ? "disabled" : "" %>>
+                        Add
+                    </button>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<script>const slug = "<%= slug %>";</script>
+<script src="/menu.js"></script>
+</body>
