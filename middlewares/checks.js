@@ -56,4 +56,6 @@ async function checkActiveCanteen(req,res,next) {
     next();
 }
 
+
+
 module.exports={checkAdmin,checkSuperAdmin,isLoggedIn,checkCanteen,checkActiveCanteen};

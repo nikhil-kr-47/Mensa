@@ -92,6 +92,11 @@ module.exports.postUserLogin = async(req, res, next) => {
       return res.redirect(`/Mensa.app/canteen/${slug}`);
     }
 
+    if(user.isBlocked){
+      req.flash("error","Your account has been blocked by your canteen's admin.");
+      return res.redirect(`/Mensa.app/canteen/${slug}`);
+    }
+
     if (!user.isVerified) {
           req.flash("error", "Verify your email first through sign in again.");
           return res.redirect(`/Mensa.app/canteen/${slug}`);
@@ -155,3 +160,42 @@ module.exports.userLogout=async(req,res,next)=>{
     return res.redirect("/Mensa.app");
   });
 }
+
+module.exports.flagUser = async (req, res, next) => {
+  let { slug, userId } = req.params;
+  let user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ success: false, msg: "User not found." });
+  }
+
+  user.flagCnt = (user.flagCnt || 0) + 1;
+  await user.save();
+
+  return res.json({
+    success: true,
+    flagCnt: user.flagCnt,
+    isBlocked: user.isBlocked,
+    msg: `Added flag for ${user.username}. Total flags: ${user.flagCnt}.`
+  });
+};
+
+module.exports.toggleBlockUser = async (req, res, next) => {
+  let { slug, userId } = req.params;
+  let user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ success: false, msg: "User not found." });
+  }
+
+  user.isBlocked = !user.isBlocked;
+  await user.save();
+
+  return res.json({
+    success: true,
+    flagCnt: user.flagCnt || 0,
+    isBlocked: user.isBlocked,
+    msg: user.isBlocked 
+      ? `${user.username} has been blocked from placing orders.` 
+      : `${user.username} has been unblocked.`
+  });
+};
+

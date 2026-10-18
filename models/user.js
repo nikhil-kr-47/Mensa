@@ -49,6 +49,14 @@ const userSchema=mongoose.Schema({
         type:Date,
         default:Date.now
     },
+    flagCnt:{
+        type:Number,
+        default:0
+    },
+    isBlocked:{
+        type:Boolean,
+        default:false
+    },
     canteen:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Canteen",

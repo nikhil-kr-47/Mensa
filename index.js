@@ -452,7 +452,25 @@ app.get(`/Mensa.app/canteen/:slug/dashboard/:type`,checkCanteen,checkActiveCante
     const slotCount = slotOrders.length;
     const revenue = revenueAgg.length > 0 && revenueAgg[0].total ? revenueAgg[0].total : 0;
 
-    res.render("adminDashboard.ejs", { hostelCount, queueCount, slotCount, revenue, hostelOrders, queueOrders, slotOrders, menuCount, slug, clgName: canteen.clgName, menuItems });
+    const allActiveOrders = [...hostelOrders, ...queueOrders, ...slotOrders];
+    const flaggedOrders = allActiveOrders.filter(o => o.user && (o.user.flagCnt > 0 || o.user.isBlocked));
+    const flaggedCount = flaggedOrders.length;
+
+    res.render("adminDashboard.ejs", { 
+      hostelCount, 
+      queueCount, 
+      slotCount, 
+      revenue, 
+      hostelOrders, 
+      queueOrders, 
+      slotOrders, 
+      flaggedOrders,
+      flaggedCount,
+      menuCount, 
+      slug, 
+      clgName: canteen.clgName, 
+      menuItems 
+    });
 }else{
   const menuItems=await Menu.find({canteen:canteen._id}).sort({createdAt:-1});
   const cartCount=req.session.cart ? req.session.cart.reduce((sum, item) => sum + item.quantity, 0) : 0;

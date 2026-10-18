@@ -3080,3 +3080,115 @@ button:disabled,
   }
 }
 
+/* ==========================================================================
+   FLAGGED ORDERS & STUDENT MODERATION UI
+   ========================================================================== */
+
+.d-none {
+  display: none !important;
+}
+
+.text-danger {
+  color: var(--danger) !important;
+}
+
+.stat-tile-warning {
+  border-color: rgba(220, 38, 38, 0.4) !important;
+  background: #FFF5F5 !important;
+}
+
+.stat-tile-warning .stat-num {
+  color: var(--danger) !important;
+}
+
+.order-flag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--amber-soft);
+  color: var(--amber-ink);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.order-flag-badge.is-blocked {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.flagged-card-highlight {
+  border-left: 4px solid var(--amber) !important;
+}
+
+.user-moderation-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px dashed var(--line);
+  flex-wrap: wrap;
+}
+
+.btn-flag-user {
+  background: var(--amber-soft);
+  color: var(--amber-ink);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-flag-user:hover {
+  background: #FDE68A;
+  transform: translateY(-1px);
+}
+
+.btn-block-user {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-block-user.btn-block {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.btn-block-user.btn-block:hover {
+  background: #FECACA;
+  transform: translateY(-1px);
+}
+
+.btn-block-user.btn-unblock {
+  background: var(--green-soft);
+  color: var(--green-ink);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+
+.btn-block-user.btn-unblock:hover {
+  background: #BBF7D0;
+  transform: translateY(-1px);
+}
+
+

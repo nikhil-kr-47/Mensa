@@ -25,6 +25,10 @@
                     <span class="stat-num" id="revenueNum">&#8377;<%= typeof revenue === 'number' ? revenue : (Array.isArray(revenue) && revenue.length > 0 ? (revenue[0].total || revenue[0].revenue || 0) : 0) %></span>
                     <span class="stat-label">Revenue today</span>
                 </div>
+                <div class="stat-tile <%= flaggedCount > 0 ? 'stat-tile-warning' : '' %>">
+                    <span class="stat-num" id="flaggedCountNum"><%= flaggedCount %></span>
+                    <span class="stat-label">Flagged orders</span>
+                </div>
             </div>
         </section>
 
@@ -35,6 +39,7 @@
                     <button type="button" id="hostelOrderBtn" class="btnActive">Hostel delivery</button>
                     <button type="button" id="queueOrderBtn">Live queue</button>
                     <button type="button" id="slotOrderBtn">Slot bookings</button>
+                    <button type="button" id="flaggedOrderBtn"><i class="fa-solid fa-flag"></i> Flagged (<span id="flaggedTabCount"><%= flaggedCount %></span>)</button>
                 </div>
             </div>
 
@@ -44,12 +49,16 @@
                         <div class="empty-orders-note">No active hostel delivery orders.</div>
                     <% } %>
                     <% hostelOrders.forEach(order => { %>
-                        <div class="orders-card" data-orderid="<%= order._id %>" data-ordertype="hostel">
+                        <div class="orders-card <%= (order.user && (order.user.flagCnt > 0 || order.user.isBlocked)) ? 'flagged-card-highlight' : '' %>" data-orderid="<%= order._id %>" data-ordertype="hostel">
                             <div class="order-summary-row">
                                 <i class="fa-solid fa-caret-right caret-icon"></i>
                                 <span class="order-token">#<%= order.tokenNo || order.roomNo %></span>
                                 <span class="order-price">&#8377;<%= order.total %></span>
                                 <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <span class="order-flag-badge <%= (order.user && (order.user.flagCnt > 0 || order.user.isBlocked)) ? '' : 'd-none' %> <%= (order.user && order.user.isBlocked) ? 'is-blocked' : '' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                    <i class="fa-solid <%= (order.user && order.user.isBlocked) ? 'fa-ban' : 'fa-flag' %>"></i>
+                                    <span class="flag-text"><%= (order.user && order.user.isBlocked) ? 'Blocked' : ((order.user ? order.user.flagCnt : 0) + ' Flag' + ((order.user && order.user.flagCnt > 1) ? 's' : '')) %></span>
+                                </span>
                                 <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
                             </div>
                             <div class="orderDetailDiv">
@@ -74,7 +83,26 @@
                                     <% } else if(order.orderType==="slot"){ %>
                                         <div class="meta-line"><span class="meta-label">Slot</span> <span class="meta-value"><%= order.slotTime || '-' %></span></div>
                                     <% } %>
+                                    <div class="meta-line">
+                                        <span class="meta-label">Flags</span>
+                                        <span class="meta-value user-flag-cnt-val" data-userid="<%= order.user ? order.user._id : '' %>"><%= order.user ? (order.user.flagCnt || 0) : 0 %></span>
+                                    </div>
+                                    <div class="meta-line user-blocked-status-line <%= (order.user && order.user.isBlocked) ? '' : 'd-none' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                        <span class="meta-label">Account</span>
+                                        <span class="meta-value text-danger"><strong>Blocked</strong></span>
+                                    </div>
                                 </div>
+                                <% if (order.user) { %>
+                                    <div class="user-moderation-row" data-userid="<%= order.user._id %>">
+                                        <button type="button" class="btn-flag-user btn-sm" title="Add strike / warning for uncollected order">
+                                            <i class="fa-solid fa-flag"></i> Add flag (<span class="card-flag-num"><%= order.user.flagCnt || 0 %></span>)
+                                        </button>
+                                        <button type="button" class="btn-block-user btn-sm <%= order.user.isBlocked ? 'btn-unblock' : 'btn-block' %>">
+                                            <i class="fa-solid <%= order.user.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i>
+                                            <span class="block-btn-text"><%= order.user.isBlocked ? 'Unblock student' : 'Block student' %></span>
+                                        </button>
+                                    </div>
+                                <% } %>
                             </div>
                         </div>
                     <% }) %>
@@ -85,12 +113,16 @@
                         <div class="empty-orders-note">No active queue orders.</div>
                     <% } %>
                     <% queueOrders.forEach(order => { %>
-                        <div class="orders-card" data-orderid="<%= order._id %>" data-ordertype="queue">
+                        <div class="orders-card <%= (order.user && (order.user.flagCnt > 0 || order.user.isBlocked)) ? 'flagged-card-highlight' : '' %>" data-orderid="<%= order._id %>" data-ordertype="queue">
                             <div class="order-summary-row">
                                 <i class="fa-solid fa-caret-right caret-icon"></i>
                                 <span class="order-token">#<%= order.tokenNo %></span>
                                 <span class="order-price">&#8377;<%= order.total %></span>
                                 <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <span class="order-flag-badge <%= (order.user && (order.user.flagCnt > 0 || order.user.isBlocked)) ? '' : 'd-none' %> <%= (order.user && order.user.isBlocked) ? 'is-blocked' : '' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                    <i class="fa-solid <%= (order.user && order.user.isBlocked) ? 'fa-ban' : 'fa-flag' %>"></i>
+                                    <span class="flag-text"><%= (order.user && order.user.isBlocked) ? 'Blocked' : ((order.user ? order.user.flagCnt : 0) + ' Flag' + ((order.user && order.user.flagCnt > 1) ? 's' : '')) %></span>
+                                </span>
                                 <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
                             </div>
                             <div class="orderDetailDiv">
@@ -115,7 +147,26 @@
                                     <% } else if(order.orderType==="slot"){ %>
                                         <div class="meta-line"><span class="meta-label">Slot</span> <span class="meta-value"><%= order.slotTime || '-' %></span></div>
                                     <% } %>
+                                    <div class="meta-line">
+                                        <span class="meta-label">Flags</span>
+                                        <span class="meta-value user-flag-cnt-val" data-userid="<%= order.user ? order.user._id : '' %>"><%= order.user ? (order.user.flagCnt || 0) : 0 %></span>
+                                    </div>
+                                    <div class="meta-line user-blocked-status-line <%= (order.user && order.user.isBlocked) ? '' : 'd-none' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                        <span class="meta-label">Account</span>
+                                        <span class="meta-value text-danger"><strong>Blocked</strong></span>
+                                    </div>
                                 </div>
+                                <% if (order.user) { %>
+                                    <div class="user-moderation-row" data-userid="<%= order.user._id %>">
+                                        <button type="button" class="btn-flag-user btn-sm" title="Add strike / warning for uncollected order">
+                                            <i class="fa-solid fa-flag"></i> Add flag (<span class="card-flag-num"><%= order.user.flagCnt || 0 %></span>)
+                                        </button>
+                                        <button type="button" class="btn-block-user btn-sm <%= order.user.isBlocked ? 'btn-unblock' : 'btn-block' %>">
+                                            <i class="fa-solid <%= order.user.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i>
+                                            <span class="block-btn-text"><%= order.user.isBlocked ? 'Unblock student' : 'Block student' %></span>
+                                        </button>
+                                    </div>
+                                <% } %>
                             </div>
                         </div>
                     <% }) %>
@@ -126,12 +177,16 @@
                         <div class="empty-orders-note">No active slot bookings.</div>
                     <% } %>
                     <% slotOrders.forEach(order => { %>
-                        <div class="orders-card" data-orderid="<%= order._id %>" data-ordertype="slot">
+                        <div class="orders-card <%= (order.user && (order.user.flagCnt > 0 || order.user.isBlocked)) ? 'flagged-card-highlight' : '' %>" data-orderid="<%= order._id %>" data-ordertype="slot">
                             <div class="order-summary-row">
                                 <i class="fa-solid fa-caret-right caret-icon"></i>
                                 <span class="order-token">#<%= order.tokenNo || order.slotTime %></span>
                                 <span class="order-price">&#8377;<%= order.total %></span>
                                 <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <span class="order-flag-badge <%= (order.user && (order.user.flagCnt > 0 || order.user.isBlocked)) ? '' : 'd-none' %> <%= (order.user && order.user.isBlocked) ? 'is-blocked' : '' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                    <i class="fa-solid <%= (order.user && order.user.isBlocked) ? 'fa-ban' : 'fa-flag' %>"></i>
+                                    <span class="flag-text"><%= (order.user && order.user.isBlocked) ? 'Blocked' : ((order.user ? order.user.flagCnt : 0) + ' Flag' + ((order.user && order.user.flagCnt > 1) ? 's' : '')) %></span>
+                                </span>
                                 <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
                             </div>
                             <div class="orderDetailDiv">
@@ -156,7 +211,86 @@
                                     <% } else if(order.orderType==="slot"){ %>
                                         <div class="meta-line"><span class="meta-label">Slot</span> <span class="meta-value"><%= order.slotTime || '-' %></span></div>
                                     <% } %>
+                                    <div class="meta-line">
+                                        <span class="meta-label">Flags</span>
+                                        <span class="meta-value user-flag-cnt-val" data-userid="<%= order.user ? order.user._id : '' %>"><%= order.user ? (order.user.flagCnt || 0) : 0 %></span>
+                                    </div>
+                                    <div class="meta-line user-blocked-status-line <%= (order.user && order.user.isBlocked) ? '' : 'd-none' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                        <span class="meta-label">Account</span>
+                                        <span class="meta-value text-danger"><strong>Blocked</strong></span>
+                                    </div>
                                 </div>
+                                <% if (order.user) { %>
+                                    <div class="user-moderation-row" data-userid="<%= order.user._id %>">
+                                        <button type="button" class="btn-flag-user btn-sm" title="Add strike / warning for uncollected order">
+                                            <i class="fa-solid fa-flag"></i> Add flag (<span class="card-flag-num"><%= order.user.flagCnt || 0 %></span>)
+                                        </button>
+                                        <button type="button" class="btn-block-user btn-sm <%= order.user.isBlocked ? 'btn-unblock' : 'btn-block' %>">
+                                            <i class="fa-solid <%= order.user.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i>
+                                            <span class="block-btn-text"><%= order.user.isBlocked ? 'Unblock student' : 'Block student' %></span>
+                                        </button>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+
+                <div id="flaggedTable" class="flaggedOrderBtn orders-table-panel" style="display:none;">
+                    <% if (flaggedOrders.length === 0) { %>
+                        <div class="empty-orders-note"><i class="fa-solid fa-circle-check" style="color: var(--green); margin-right: 6px;"></i> No active orders from flagged or blocked students.</div>
+                    <% } %>
+                    <% flaggedOrders.forEach(order => { %>
+                        <div class="orders-card flagged-card-highlight" data-orderid="<%= order._id %>" data-ordertype="<%= order.orderType %>">
+                            <div class="order-summary-row">
+                                <i class="fa-solid fa-caret-right caret-icon"></i>
+                                <span class="order-token">#<%= order.tokenNo || order.roomNo || order.slotTime %> (<%= order.orderType %>)</span>
+                                <span class="order-price">&#8377;<%= order.total %></span>
+                                <span class="orderStatus" data-orderstatus="<%= order.status %>"><%= order.status %></span>
+                                <span class="order-flag-badge <%= (order.user && order.user.isBlocked) ? 'is-blocked' : '' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                    <i class="fa-solid <%= (order.user && order.user.isBlocked) ? 'fa-ban' : 'fa-flag' %>"></i>
+                                    <span class="flag-text"><%= (order.user && order.user.isBlocked) ? 'Blocked' : ((order.user ? order.user.flagCnt : 0) + ' Flag' + ((order.user && order.user.flagCnt > 1) ? 's' : '')) %></span>
+                                </span>
+                                <button type="button" class="markDoneBtn"><%= order.status === "ready" ? "Mark delivered" : "Mark done" %></button>
+                            </div>
+                            <div class="orderDetailDiv">
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Itemized</span>
+                                    <div class="detail-items-list">
+                                        <% order.items.forEach(item => { %>
+                                            <div class="item-line">
+                                                <span><%= item.quantity %> &times; <%= item.name %></span>
+                                                <span class="item-line-price">&#8377;<%= item.price * item.quantity %></span>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <span class="detail-col-title">Order info</span>
+                                    <div class="meta-line"><span class="meta-label">Placed</span> <span class="meta-value"><%= order.createdAt ? order.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Type</span> <span class="meta-value"><%= order.orderType.toUpperCase() %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Student</span> <span class="meta-value"><%= order.user ? order.user.username : 'Student' %></span></div>
+                                    <div class="meta-line"><span class="meta-label">Contact</span> <span class="meta-value"><%= order.user ? order.user.phoneNo : '-' %></span></div>
+                                    <div class="meta-line">
+                                        <span class="meta-label">Flags</span>
+                                        <span class="meta-value user-flag-cnt-val" data-userid="<%= order.user ? order.user._id : '' %>"><%= order.user ? (order.user.flagCnt || 0) : 0 %></span>
+                                    </div>
+                                    <div class="meta-line user-blocked-status-line <%= (order.user && order.user.isBlocked) ? '' : 'd-none' %>" data-userid="<%= order.user ? order.user._id : '' %>">
+                                        <span class="meta-label">Account</span>
+                                        <span class="meta-value text-danger"><strong>Blocked</strong></span>
+                                    </div>
+                                </div>
+                                <% if (order.user) { %>
+                                    <div class="user-moderation-row" data-userid="<%= order.user._id %>">
+                                        <button type="button" class="btn-flag-user btn-sm" title="Add strike / warning for uncollected order">
+                                            <i class="fa-solid fa-flag"></i> Add flag (<span class="card-flag-num"><%= order.user.flagCnt || 0 %></span>)
+                                        </button>
+                                        <button type="button" class="btn-block-user btn-sm <%= order.user.isBlocked ? 'btn-unblock' : 'btn-block' %>">
+                                            <i class="fa-solid <%= order.user.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i>
+                                            <span class="block-btn-text"><%= order.user.isBlocked ? 'Unblock student' : 'Block student' %></span>
+                                        </button>
+                                    </div>
+                                <% } %>
                             </div>
                         </div>
                     <% }) %>
