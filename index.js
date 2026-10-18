@@ -190,6 +190,7 @@ app.post("/Mensa.app/adminRegister",cantReqValidate,wrapAsync(async(req,res,next
   try{
     await mailSend(doc);
   }catch(err){
+    console.error("mailSend failed in adminRegister:", err);
     req.session.regEmail=undefined;
     req.session.regType=undefined;
     req.flash("error","Cannot send mail. PLease retry after some time.");

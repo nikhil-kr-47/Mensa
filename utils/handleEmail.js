@@ -9,15 +9,16 @@ function generateOtp(){
 }
 
 async function mailSend(doc,msg=""){
+    const otpSecret = process.env.OTP_SECRET || "mensa-default-otp-secret-key";
     if(msg===""){
         let randOtp=generateOtp();
-    let hashedRandOtp=crypto.createHmac("sha256",process.env.OTP_SECRET).update(randOtp.toString()).digest("hex");
-    doc.otp=hashedRandOtp;
-    doc.otpExpiry=Date.now() + 5*60*1000;
-    doc.otpUpdatedAt=Date.now();
-    doc.otpFreq=doc.otpFreq+1;
-    await doc.save();
-    await sendMail(doc,randOtp);
+        let hashedRandOtp=crypto.createHmac("sha256",otpSecret).update(randOtp.toString()).digest("hex");
+        doc.otp=hashedRandOtp;
+        doc.otpExpiry=Date.now() + 5*60*1000;
+        doc.otpUpdatedAt=Date.now();
+        doc.otpFreq=doc.otpFreq+1;
+        await doc.save();
+        await sendMail(doc,randOtp);
    }else if(msg==="approve"){
         await sendMail(doc,"approve");
     }else if(msg==="reject"){
