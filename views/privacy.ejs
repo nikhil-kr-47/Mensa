@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — Mensa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="policy-body">
+    <header class="app-header">
+        <div class="landing-nav">
+            <a href="/Mensa.app" class="nav-brand">
+                <span class="nav-brand-icon"><i class="fa-solid fa-burger"></i></span>
+                <span class="nav-title">Mensa<span class="brand-dot"></span></span>
+            </a>
+            <div class="nav-actions">
+                <a href="/Mensa.app" class="btn-secondary btn-sm nav-auth-btn">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to home</span>
+                </a>
+                <% if (typeof currUser !== 'undefined' && currUser) { %>
+                    <a href="/Mensa.app/logout" class="btn-secondary btn-sm nav-auth-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Log out</span>
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <%-include("./includes/flash.ejs")%>
+
+    <main class="policy-main">
+        <div class="policy-container">
+            <div class="policy-header">
+                <div class="policy-badge"><i class="fa-solid fa-user-shield"></i> Data Transparency</div>
+                <h1 class="policy-title">Privacy Policy</h1>
+                <p class="policy-subtitle">Your privacy is fundamental to Mensa. This policy details how we collect, handle, and protect your personal information.</p>
+                <div class="policy-meta">
+                    <span><i class="fa-regular fa-clock"></i> Effective Date: October 2026</span>
+                    <span><i class="fa-solid fa-lock"></i> GDPR & Campus Privacy Aligned</span>
+                </div>
+            </div>
+
+            <!-- Policy Navigation Tabs -->
+            <nav class="policy-nav-tabs">
+                <a href="/Mensa.app/guidelines" class="policy-tab"><i class="fa-solid fa-book-open"></i> Guidelines</a>
+                <a href="/Mensa.app/terms" class="policy-tab"><i class="fa-solid fa-scale-balanced"></i> Terms of Service</a>
+                <a href="/Mensa.app/privacy" class="policy-tab active"><i class="fa-solid fa-user-shield"></i> Privacy Policy</a>
+            </nav>
+
+            <div class="policy-card">
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-database"></i></span>
+                        <h2>1. Information We Collect</h2>
+                    </div>
+                    <p>Mensa collects only the minimal data necessary to fulfill orders and provide secure canteen queue services:</p>
+                    <ul class="policy-list">
+                        <li><strong>Personal Identification:</strong> Your full name, university email address, and contact phone number provided during account registration.</li>
+                        <li><strong>Order & Cart Details:</strong> Selected food items, delivery mode (Queue, Token, or Time Slot), total cost, order timestamps, and order statuses.</li>
+                        <li><strong>Canteen Operator Information:</strong> College affiliation name, canteen location, administrative email, and menu management data.</li>
+                        <li><strong>Authentication Data:</strong> Password hashes protected with cryptographic salt (we <em>never</em> store your plaintext password) and temporary OTP verification codes.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-bullseye"></i></span>
+                        <h2>2. How We Use Your Information</h2>
+                    </div>
+                    <p>We use your information strictly for campus operations:</p>
+                    <ul class="policy-list">
+                        <li>Processing your canteen orders and displaying real-time queue tokens at the kitchen counter.</li>
+                        <li>Sending transactional security notifications such as account verification OTPs and canteen registration approvals.</li>
+                        <li>Preventing duplicate orders, fraud, and bot activity on canteen counter systems.</li>
+                        <li><strong>No Selling of Data:</strong> We will never sell, rent, or monetize your personal details or purchasing habits to advertising brokers.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-shield-halved"></i></span>
+                        <h2>3. Security & Storage Standards</h2>
+                    </div>
+                    <p>Your data is protected using industry-standard engineering best practices:</p>
+                    <ul class="policy-list">
+                        <li><strong>Database Security:</strong> All records are stored in encrypted MongoDB Atlas cloud clusters with restricted network access controls.</li>
+                        <li><strong>Session Protection:</strong> Active sessions utilize encrypted <code>HttpOnly</code> cookies to prevent Cross-Site Scripting (XSS) and unauthorized token extraction.</li>
+                        <li><strong>Password Encryption:</strong> Passwords are protected using multi-iteration PBKDF2 hashing with unique random salts via Passport.js.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-network-wired"></i></span>
+                        <h2>4. Third-Party Service Providers</h2>
+                    </div>
+                    <p>To deliver modern canteen features, Mensa interfaces with trusted cloud infrastructure providers:</p>
+                    <ul class="policy-list">
+                        <li><strong>Cloudinary:</strong> Stores canteen dish photographs and menu visual assets over secure CDNs.</li>
+                        <li><strong>Brevo (Sendinblue):</strong> Delivers transactional verification emails, account notifications, and password reset links over encrypted HTTPS.</li>
+                        <li><strong>Render:</strong> Cloud application hosting providing automated HTTPS/TLS encryption.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-user-xmark"></i></span>
+                        <h2>5. Your Rights & Account Deletion</h2>
+                    </div>
+                    <p>You have full ownership of your campus profile. To request an export of your order history or to permanently erase your user account and personal details from Mensa servers, please email us from your registered email address at <a href="mailto:kumar47nikhil@gmail.com">kumar47nikhil@gmail.com</a> with the subject <em>"Account Data Deletion Request"</em>.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <%-include("./includes/footer.ejs")%>
+    <script src="/script.js"></script>
+</body>
+</html>

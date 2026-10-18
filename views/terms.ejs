@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — Mensa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="policy-body">
+    <header class="app-header">
+        <div class="landing-nav">
+            <a href="/Mensa.app" class="nav-brand">
+                <span class="nav-brand-icon"><i class="fa-solid fa-burger"></i></span>
+                <span class="nav-title">Mensa<span class="brand-dot"></span></span>
+            </a>
+            <div class="nav-actions">
+                <a href="/Mensa.app" class="btn-secondary btn-sm nav-auth-btn">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to home</span>
+                </a>
+                <% if (typeof currUser !== 'undefined' && currUser) { %>
+                    <a href="/Mensa.app/logout" class="btn-secondary btn-sm nav-auth-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Log out</span>
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <%-include("./includes/flash.ejs")%>
+
+    <main class="policy-main">
+        <div class="policy-container">
+            <div class="policy-header">
+                <div class="policy-badge"><i class="fa-solid fa-scale-balanced"></i> Legal Terms</div>
+                <h1 class="policy-title">Terms of Service</h1>
+                <p class="policy-subtitle">Please read these terms carefully before utilizing the Mensa digital campus platform for online ordering and canteen operations.</p>
+                <div class="policy-meta">
+                    <span><i class="fa-regular fa-clock"></i> Effective Date: October 2026</span>
+                    <span><i class="fa-solid fa-building-columns"></i> Mensa Platform Operations</span>
+                </div>
+            </div>
+
+            <!-- Policy Navigation Tabs -->
+            <nav class="policy-nav-tabs">
+                <a href="/Mensa.app/guidelines" class="policy-tab"><i class="fa-solid fa-book-open"></i> Guidelines</a>
+                <a href="/Mensa.app/terms" class="policy-tab active"><i class="fa-solid fa-scale-balanced"></i> Terms of Service</a>
+                <a href="/Mensa.app/privacy" class="policy-tab"><i class="fa-solid fa-user-shield"></i> Privacy Policy</a>
+            </nav>
+
+            <div class="policy-card">
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-file-contract"></i></span>
+                        <h2>1. Acceptance of Terms</h2>
+                    </div>
+                    <p>By accessing or using the Mensa web application (located at <code>mensa.app</code> or <code>mensa-1.onrender.com</code>), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, you may not register an account or place canteen orders through the platform.</p>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-user-check"></i></span>
+                        <h2>2. User Accounts & Campus Verification</h2>
+                    </div>
+                    <p>To access ordering capabilities and counter status feeds:</p>
+                    <ul class="policy-list">
+                        <li><strong>Registration:</strong> Students and staff must provide accurate, up-to-date information including their full name, active email, and mobile phone number.</li>
+                        <li><strong>Account Security:</strong> You are solely responsible for maintaining the confidentiality of your account credentials and one-time verification passwords (OTPs). You agree to immediately notify Mensa support of any unauthorized use of your account.</li>
+                        <li><strong>Canteen Administration:</strong> Canteen operators submitting registration requests certify that they are authorized representatives of the campus establishment and agree to maintain up-to-date item availability and accurate pricing.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-cash-register"></i></span>
+                        <h2>3. Orders, Pricing & Fulfillment</h2>
+                    </div>
+                    <p>Mensa functions as a campus technological facilitator linking student consumers with respective campus canteens:</p>
+                    <ul class="policy-list">
+                        <li><strong>Menu Pricing:</strong> All prices listed on canteen menus are set by the independent canteen vendor and are inclusive of applicable taxes unless stated otherwise.</li>
+                        <li><strong>Order Status Updates:</strong> The progression of orders through <em>Pending</em>, <em>Preparing</em>, <em>Ready</em>, and <em>Delivered</em> stages reflects active kitchen reporting. Pickups must be made in person by the account owner.</li>
+                        <li><strong>Inventory Discrepancies:</strong> While canteens endeavor to keep menu items accurate, occasional kitchen stockouts may occur. In such cases, canteens may mark items unavailable or issue immediate item substitutions or refunds.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-rotate-left"></i></span>
+                        <h2>4. Cancellations & Refund Policy</h2>
+                    </div>
+                    <p>Because canteen kitchen food is perishable and cooked to order:</p>
+                    <ul class="policy-list">
+                        <li>Orders may only be canceled when their live status is <strong>Pending</strong>. Once preparation commences, cancellation is strictly disallowed.</li>
+                        <li>Refund requests for unfulfilled orders, expired stock, or quality discrepancies must be reported directly at the canteen counter with your digital order receipt on the day of purchase.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-shield-virus"></i></span>
+                        <h2>5. Limitation of Liability</h2>
+                    </div>
+                    <p>Mensa provides digital counter queue and ticketing software. Mensa does not cook, package, or inspect food products. The individual campus canteen holds sole liability for food safety, hygiene certificates, ingredient accuracy, and compliance with statutory food safety regulations.</p>
+                </section>
+
+                <section class="policy-section">
+                    <div class="section-icon-header">
+                        <span class="icon-circle"><i class="fa-solid fa-envelope-open-text"></i></span>
+                        <h2>6. Contact & Legal Inquiries</h2>
+                    </div>
+                    <p>For questions regarding these Terms or legal notices, contact our platform team at <a href="mailto:kumar47nikhil@gmail.com">kumar47nikhil@gmail.com</a>.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <%-include("./includes/footer.ejs")%>
+    <script src="/script.js"></script>
+</body>
+</html>
