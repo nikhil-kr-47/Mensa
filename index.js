@@ -138,6 +138,18 @@ app.get("/Mensa.app/adminRegister",(req,res)=>{
     res.render("users/adminRegForm.ejs");
 });
 
+app.get("/Mensa.app/guidelines", (req, res) => {
+    res.render("guidelines.ejs");
+});
+
+app.get("/Mensa.app/terms", (req, res) => {
+    res.render("terms.ejs");
+});
+
+app.get("/Mensa.app/privacy", (req, res) => {
+    res.render("privacy.ejs");
+});
+
 //Admin Register
 app.post("/Mensa.app/adminRegister",cantReqValidate,wrapAsync(async(req,res,next)=>{
   let {email,location,clgName,username,phoneNo}=req.body;
