@@ -106,6 +106,11 @@ module.exports.placeOrder=async(req,res,next)=>{
         }
     }
 
+    if(user && user.isBlocked){
+        req.flash("error", "Your account has been blocked by the canteen admin. You cannot place orders.");
+        return res.redirect(`/Mensa.app/canteen/${slug}`);
+    }
+
     let {deliveryMode,orderType,slot,roomNo}=req.body;
 
     let finalOrderType="queue";
